@@ -1,0 +1,5 @@
+SYNTHETIC ACCEPTANCE EVIDENCE ONLY
+Patient owner user 8, patient 8, doctor user 10.
+Administrator user 11 attests to synthetic consent for assessment history/detail reads for 30 days.
+References: synthetic-consent-178834b3975b-1 and synthetic-consent-178834b3975b-2.
+No real person or patient data.

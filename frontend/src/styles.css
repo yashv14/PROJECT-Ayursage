@@ -1,0 +1,21 @@
+:root { font-family: system-ui, sans-serif; color: #203e37; background: #f5f8f6; }
+body { margin: 0; background: #f5f8f6; color: #203e37; }
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.brand { font-size: 1.25rem; font-weight: 800; letter-spacing: .08em; text-decoration: none; color: #174b40; }
+.brand span { font-weight: 500; }
+a { color: #1b6654; }
+.eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .13em; color: #477566; }
+.intro { padding-top: 1.5rem; }
+.card { border-color: #dbe6df; border-radius: 1rem; }
+.auth-card { max-width: 34rem; margin-left: auto; }
+.role-badge { background: #e4f0e8; color: #174b40; }
+.btn-primary { --bs-btn-bg: #216653; --bs-btn-border-color: #216653; --bs-btn-hover-bg: #174b40; --bs-btn-hover-border-color: #174b40; --bs-btn-active-bg: #174b40; --bs-btn-disabled-bg: #216653; --bs-btn-disabled-border-color: #216653; }
+.btn-outline-primary { --bs-btn-color: #216653; --bs-btn-border-color: #216653; --bs-btn-hover-bg: #216653; --bs-btn-hover-border-color: #216653; }
+.form-control:focus { border-color: #477566; box-shadow: 0 0 0 .25rem rgb(33 102 83 / 18%); }
+.home-page { max-width: 54rem; }
+.skip-link { position: absolute; z-index: 10; background: white; padding: .75rem; }
+main:focus { outline: none; }
+@media (max-width: 991px) { .auth-card { max-width: none; } .intro { padding-top: 0; } }
+
+.patient-page { max-width: 64rem; }
+.patient-text { white-space: pre-wrap; overflow-wrap: anywhere; }

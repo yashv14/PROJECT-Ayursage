@@ -1,0 +1,15 @@
+{
+  "target": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\auth\\auth.sqlite3",
+  "before": "0004_assessment_reviews",
+  "after": "0005_patient_doctor_grants",
+  "integrity": "ok",
+  "foreign_key_check": "ok",
+  "existing_counts": {
+    "users": 7,
+    "patients": 7,
+    "clinical_assessments": 3,
+    "assessment_reviews": 0,
+    "roles": 3
+  },
+  "existing_rows_unchanged": true
+}

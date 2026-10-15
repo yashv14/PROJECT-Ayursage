@@ -1,0 +1,39 @@
+{
+  "target": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\auth\\auth.sqlite3",
+  "backup": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\backups\\auth-before-0006-20261014-004628.sqlite3",
+  "integrity": "ok",
+  "before": {
+    "alembic_version": {
+      "count": 1,
+      "sha256": "2111bb096e5000d6d5496785df80ab94cc0e05c82919a62713a77da116daeca1"
+    },
+    "assessment_reviews": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "clinical_assessments": {
+      "count": 4,
+      "sha256": "7c73f382d93ddea3a22efd178b9a4a04ec40890b09632934bcc887cf39f843eb"
+    },
+    "grant_administrators": {
+      "count": 1,
+      "sha256": "18fa00e87637068587a15ed00e05fc2d5b3d8f0ee053f5cd51ea25b221313b47"
+    },
+    "patient_doctor_grants": {
+      "count": 2,
+      "sha256": "dc5d4905d933a45219d4f991ac0e6f596bb4ec7d9c278efe339c434b25d5b306"
+    },
+    "patients": {
+      "count": 9,
+      "sha256": "490d0ba62278ff63e5b0eb80d13a2a3cedd4653c6cff4cb68c8d28f39eb8db68"
+    },
+    "roles": {
+      "count": 3,
+      "sha256": "29e30ee50fcd2db3c13c8b7ff1ebdfb114155adbe6f910e5f344cdae467cc2ab"
+    },
+    "users": {
+      "count": 11,
+      "sha256": "4e72539e2bd2392dbd2cd36225c1d8acecfc81e24255bc0980872e92c7d381b3"
+    }
+  }
+}

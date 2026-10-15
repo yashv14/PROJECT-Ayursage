@@ -1,0 +1,125 @@
+{
+  "browserVerified": false,
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/6/assessments",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments/3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments/3",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments/3",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/6/assessments/3",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/6/assessments",
+      "status": 404
+    }
+  ],
+  "userId": 6,
+  "patientId": 6,
+  "assessmentId": 3,
+  "inputCount": 12,
+  "result": "PASS: live HTTP, existing client/workspace/session and route resolver; no mounted browser"
+}

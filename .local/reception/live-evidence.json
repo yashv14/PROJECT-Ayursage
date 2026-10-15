@@ -1,0 +1,275 @@
+{
+  "origin": "http://127.0.0.1:5173",
+  "run": "3723f74493",
+  "browser_verified": false,
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/patients",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/patients",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/doctors",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/appointments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/appointments",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/reschedule",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/status",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/reschedule",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/status",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/status",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/4/status",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/5/status",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/reception/appointments/6/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/appointments",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/12/assessments",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/assessments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/assessments/6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/assessments/6",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/12/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/doctor-access-grants",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/12/doctor-access-grants",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/12/doctor-access-grants/1/revoke",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/12/assessments/6/review",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/12/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/reception/appointments",
+      "status": 401
+    }
+  ],
+  "result": "PASS",
+  "revision": "0006_receptionist_appointments",
+  "synthetic_user_ids": {
+    "owner": 18,
+    "other": 19,
+    "doctor": 20,
+    "doctor2": 21,
+    "reception": 22,
+    "reception2": 23
+  },
+  "appointment_statuses": [
+    [
+      4,
+      "completed"
+    ],
+    [
+      5,
+      "cancelled"
+    ],
+    [
+      6,
+      "no_show"
+    ]
+  ],
+  "event_count": 8,
+  "assessment_id": 6,
+  "original_rows_unchanged": true,
+  "cleanup": "Synthetic rows retained; appointments ended through supported terminal transitions. No deletion endpoint."
+}

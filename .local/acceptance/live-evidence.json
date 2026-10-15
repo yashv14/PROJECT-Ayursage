@@ -1,0 +1,293 @@
+{
+  "origin": "http://localhost:5173",
+  "run": "178834b3975b",
+  "browser_verified": false,
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/assessments",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 400
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/9/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/9/assessments/4",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/me",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/assessments/4/review",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants/1/revoke",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants/1/revoke",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/8/doctor-access-grants/2/revoke",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/8/assessments/4",
+      "status": 200
+    }
+  ],
+  "controlled_clock_checks": [
+    {
+      "path": "/api/patients/8/assessments",
+      "grant_clock": "2026-11-12T18:40:20Z",
+      "status": 200
+    },
+    {
+      "path": "/api/patients/8/assessments/4",
+      "grant_clock": "2026-11-12T18:40:20Z",
+      "status": 200
+    },
+    {
+      "path": "/api/patients/8/assessments",
+      "grant_clock": "2026-11-12T18:40:21Z",
+      "status": 403
+    },
+    {
+      "path": "/api/patients/8/assessments/4",
+      "grant_clock": "2026-11-12T18:40:21Z",
+      "status": 403
+    }
+  ],
+  "result": "PASS",
+  "target": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\auth\\auth.sqlite3",
+  "revision": "0005_patient_doctor_grants",
+  "synthetic_user_ids": {
+    "owner": 8,
+    "other": 9,
+    "doctor": 10,
+    "admin": 11
+  },
+  "synthetic_patient_ids": [
+    8,
+    9
+  ],
+  "assessment_id": 4,
+  "grant_ids": [
+    1,
+    2
+  ],
+  "grant_duration_seconds": 2592000,
+  "persisted_revocations": [
+    [
+      1,
+      "revoked",
+      8,
+      "2026-10-13 18:40:50.000000"
+    ],
+    [
+      2,
+      "revoked",
+      11,
+      "2026-10-13 18:41:00.000000"
+    ]
+  ],
+  "final_counts": {
+    "users": 11,
+    "patients": 9,
+    "clinical_assessments": 4,
+    "assessment_reviews": 0,
+    "roles": 3,
+    "patient_doctor_grants": 2,
+    "grant_administrators": 1
+  },
+  "original_records_unchanged": true,
+  "cleanup": "Both grants revoked via supported endpoints. Rows retained: no safe application deletion endpoint; audit history intentionally preserved."
+}

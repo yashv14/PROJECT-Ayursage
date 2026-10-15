@@ -1,0 +1,53 @@
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+.aws/
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage*
+htmlcov/
+# JavaScript and build outputs
+node_modules/
+.npm-cache/
+dist/
+build/
+coverage/
+# Patient data, datasets, model artifacts, reports
+data/
+datasets/
+uploads/
+reports/
+*.csv
+*.tsv
+*.parquet
+*.sqlite*
+*.db
+*.sql
+*.pkl
+*.pickle
+*.joblib
+*.onnx
+*.h5
+*.pt
+*.pth
+ml/artifacts/*
+!ml/artifacts/README.md
+# Local and diagnostic outputs
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

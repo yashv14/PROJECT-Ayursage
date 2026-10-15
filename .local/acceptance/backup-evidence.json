@@ -1,0 +1,20 @@
+{
+  "source": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\auth\\auth.sqlite3",
+  "backup": "C:\\Users\\yvasa\\Videos\\PROJECT-Ayursage\\.local\\backups\\auth-before-0005-20261014-000705.sqlite3",
+  "integrity": "ok",
+  "revision": "0004_assessment_reviews",
+  "counts": {
+    "users": 7,
+    "patients": 7,
+    "clinical_assessments": 3,
+    "assessment_reviews": 0,
+    "roles": 3
+  },
+  "rows_sha256": {
+    "users": "0045312e749b2abbe7bebe8ffb6bf2d0fcda60983a9719337a54790900548aa6",
+    "patients": "ecb7aa8c9b635ef731a6a215b86f5f8f3fa9386b04a5c43550c3a41e49ba7487",
+    "clinical_assessments": "c97d0e8e30d44a432121c115132183fce7add914b263f485b6e6a261fe4c52f0",
+    "assessment_reviews": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "roles": "29e30ee50fcd2db3c13c8b7ff1ebdfb114155adbe6f910e5f344cdae467cc2ab"
+  }
+}
