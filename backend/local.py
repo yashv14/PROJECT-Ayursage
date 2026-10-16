@@ -1,4 +1,4 @@
-﻿"""Explicit local auth development startup; never used by the standard factory.
+"""Explicit local auth development startup; never used by the standard factory.
 
 Run: .venv/Scripts/python.exe -B -m backend.local --port 5000
 Uses a dedicated local SQLite database and random persistent signing key.
@@ -34,6 +34,7 @@ def prepare_local_app(data_dir):
         'JWT_ACCESS_TOKEN_SECONDS': 900,
         'SQLALCHEMY_DATABASE_URI': URL.create('sqlite', database=str(directory / 'auth.sqlite3')),
         'DEBUG': False,
+        'V17_MODEL_LOADING_ENABLED': True,
     })
     # This explicitly invoked launcher upgrades only its selected local SQLite DB.
     # The normal application factory still never migrates or supplies secrets.
@@ -42,6 +43,11 @@ def prepare_local_app(data_dir):
         with db.engine.begin() as connection:
             migrations.attributes['connection'] = connection
             command.upgrade(migrations, 'head')
+        try:
+            app.extensions['v17'].load()
+            print("[INFO] AYUR-SAGE V17 ML model loaded successfully.")
+        except Exception as exc:
+            print(f"[WARN] V17 model load deferred: {exc}")
     return app
 
 

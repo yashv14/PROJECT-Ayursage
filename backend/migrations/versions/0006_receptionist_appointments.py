@@ -11,6 +11,11 @@ def prepare_roles_rebuild():
     if connection.dialect.name == "sqlite":
         connection.exec_driver_sql("PRAGMA foreign_keys=OFF")
         if connection.exec_driver_sql("PRAGMA foreign_keys").scalar() and connection.exec_driver_sql("SELECT COUNT(*) FROM users").scalar():
+            raw = connection.connection.driver_connection
+            if raw.in_transaction:
+                raw.commit()
+            connection.exec_driver_sql("PRAGMA foreign_keys=OFF")
+        if connection.exec_driver_sql("PRAGMA foreign_keys").scalar() and connection.exec_driver_sql("SELECT COUNT(*) FROM users").scalar():
             raise RuntimeError("Role migration requires a fresh dedicated SQLite connection before any data writes")
         raw=connection.connection.driver_connection
         if not raw.in_transaction:
