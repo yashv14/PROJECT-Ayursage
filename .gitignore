@@ -9,7 +9,9 @@
 credentials*.json
 .aws/
 # Python environments and generated files
+.venv
 .venv/
+venv
 venv/
 __pycache__/
 *.py[cod]
