@@ -1,0 +1,10 @@
+{
+  "name": "ayursage-project",
+  "private": true,
+  "description": "AYUR-SAGE root workspace scripts",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev --",
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix frontend test"
+  }
+}
