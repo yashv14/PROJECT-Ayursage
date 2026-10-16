@@ -1,3 +1,4 @@
+# Core Backend & Database Dependencies
 alembic==1.20.0
 blinker==1.9.0
 click==8.5.0
@@ -16,3 +17,10 @@ Werkzeug==3.1.9
 reportlab==5.0.1
 pillow==12.3.0
 charset-normalizer==3.5.2
+
+# ML Model Inference Runtime Dependencies
+joblib>=1.4.0
+scikit-learn>=1.5.0
+xgboost>=2.0.0
+numpy>=1.26.0
+pandas>=2.0.0
