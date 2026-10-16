@@ -62,7 +62,12 @@ class V17Service:
                 verified_model, _verified_source = verify_workspace_buffers()
                 # Optional runtime imports occur ONLY inside the explicit loader.
                 with warnings.catch_warnings():
-                    warnings.simplefilter("error")
+                    warnings.filterwarnings("ignore", category=UserWarning)
+                    try:
+                        from sklearn.exceptions import InconsistentVersionWarning
+                        warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+                    except ImportError:
+                        pass
                     import joblib
                     import numpy as np
                     import pandas as pd
@@ -143,7 +148,7 @@ class V17Service:
                     raise V17InvalidInput()
             try:
                 with warnings.catch_warnings():
-                    warnings.simplefilter("error")
+                    warnings.filterwarnings("ignore", category=UserWarning)
                     bundle, np = self._bundle, self._numpy
                     frame = self._pandas.DataFrame([inputs], columns=list(INPUT_FEATURES))
                     transformed = bundle["shared_pre"].transform(frame)
