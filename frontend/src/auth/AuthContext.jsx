@@ -4,16 +4,17 @@ import { createAuthService } from '../services/auth.js';
 import { createSession } from './session.js';
 import { createPatientService } from '../services/patients.js';
 import { createReceptionService } from '../services/reception.js';
+import { createReviewService } from '../doctor/review.js';
 
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [session] = useState(() => {
     const api = createApiClient({ baseUrl: import.meta.env.VITE_API_BASE_URL || '/api' });
-    return { ...createSession(api, createAuthService(api)), patients: createPatientService(api), reception: createReceptionService(api) };
+    return { ...createSession(api, createAuthService(api)), patients: createPatientService(api), reception: createReceptionService(api), reviews: createReviewService(api) };
   });
   const state = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   useEffect(() => session.connect(), [session]);
-  return <AuthContext.Provider value={{ ...state, login: session.login, logout: session.logout, register: session.register, patients: session.patients, reception: session.reception }}>
+  return <AuthContext.Provider value={{ ...state, login: session.login, logout: session.logout, register: session.register, patients: session.patients, reception: session.reception, reviews: session.reviews }}>
     {children}
   </AuthContext.Provider>;
 }

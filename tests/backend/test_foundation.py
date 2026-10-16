@@ -96,6 +96,8 @@ class FoundationTests(unittest.TestCase):
                           "/api/patients/<int:patient_id>/assessments",
                           "/api/patients/<int:patient_id>/assessments",
                           "/api/patients/<int:patient_id>/assessments/<int:assessment_id>",
+                          "/api/patients/<int:patient_id>/assessments/<int:assessment_id>/reviews",
+                          "/api/patients/<int:patient_id>/assessments/<int:assessment_id>/reviews",
                           "/api/patients/<int:patient_id>/doctor-access-grants",
                           "/api/patients/<int:patient_id>/doctor-access-grants",
                           "/api/patients/<int:patient_id>/doctor-access-grants/<int:grant_id>/revoke",

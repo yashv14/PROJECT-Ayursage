@@ -127,7 +127,7 @@ class ReviewFoundationTests(unittest.TestCase):
             headers = {} if actor is None else self.headers[actor]
             for suffix in ("/review", "/reviews", "/approve"):
                 response = self.client.post(self.url + f"/{self.assessment.id}" + suffix, json={"decision": "approved"}, headers=headers)
-                self.assertEqual(response.status_code, 404)  # No endpoint is registered.
+                self.assertEqual(response.status_code, (401 if actor is None else 403) if suffix == "/reviews" else 404)
         for actor in ("doctor", "admin"):
             self.assertEqual(self.client.get(self.url + f"/{self.assessment.id}", headers=self.headers[actor]).status_code, 403)
         self.assertEqual(db.session.query(AssessmentReview).count(), 0)
@@ -193,6 +193,9 @@ class ReviewFoundationTests(unittest.TestCase):
 
     def test_migration_preserves_assessments_without_inventing_decisions(self):
         assessment_id = self.assessment.id
+        # Revision 0006's SQLite role rebuild requires a fresh transaction.
+        with db.engine.begin() as connection:
+            command.downgrade(migration_config(connection), "0006_receptionist_appointments")
         with db.engine.begin() as connection:
             command.downgrade(migration_config(connection), "0003_assessment_inputs")
             self.assertNotIn("assessment_reviews", inspect(connection).get_table_names())

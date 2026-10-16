@@ -7,6 +7,7 @@ import { PatientWorkspacePage } from '../pages/PatientWorkspacePage.jsx';
 import { Loading } from '../components/Loading.jsx';
 import { ReceptionPage } from '../pages/ReceptionPage.jsx';
 import { DoctorAssessmentsPage } from '../pages/DoctorAssessmentsPage.jsx';
+import { AdminGrantsPage } from '../pages/AdminGrantsPage.jsx';
 
 function currentPath() { return window.location.hash.slice(1) || '/'; }
 export function Router() {
@@ -27,6 +28,7 @@ export function Router() {
   if (route.redirect) return <Loading label="Opening your page…" />;
   if (route.page === 'login' || route.page === 'register') return <AuthPage key={route.page} registration={route.page === 'register'} />;
   if (route.page === 'home') return user.role === 'receptionist' ? <ReceptionPage key={user.id} /> : <HomePage />;
+  if (route.page === 'adminGrants') return <AdminGrantsPage key={user.id} />;
   if (route.page === 'doctorViewer') return <DoctorAssessmentsPage key={`${user.id}:${route.patientId}:${route.assessmentId}`}
     patientId={route.patientId} assessmentId={route.assessmentId} />;
   if (['profile', 'newAssessment', 'history', 'detail'].includes(route.page)) return <PatientWorkspacePage key={user.id} page={route.page} assessmentId={route.assessmentId} />;

@@ -1,5 +1,9 @@
 # Patient–doctor assessment-read grants
 
+16 October extension: [clinical-review permission](doctor-clinical-review.md) is an
+explicit opt-in at issuance; existing assessment-read grants remain read-only.
+Revocation removes both permissions. The policy below records the original milestone.
+
 13 October 2026 (Asia/Calcutta). Backend implementation of the explicitly approved
 policy; no doctor UI, assessment writes, review actions, prescriptions or ML.
 

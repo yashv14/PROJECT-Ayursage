@@ -39,6 +39,8 @@ def main():
         port = sock.getsockname()[1]
     process = None
     root = None
+    schema_created = user_created = False
+    schema_dropped = user_dropped = False
     with (directory / 'mysqld.log').open('ab') as log:
         try:
             subprocess.run([executable, '--no-defaults', '--initialize-insecure', '--datadir=' + str(data),
@@ -70,8 +72,10 @@ def main():
                 root_password = secrets.token_urlsafe(32)
                 cursor.execute("ALTER USER 'root'@'localhost' IDENTIFIED BY %s", (root_password,))
                 cursor.execute('CREATE DATABASE `' + schema + '` CHARACTER SET utf8mb4')
+                schema_created = True
                 password = secrets.token_urlsafe(32)
                 cursor.execute("CREATE USER %s@'127.0.0.1' IDENTIFIED BY %s", (username, password))
+                user_created = True
                 cursor.execute('GRANT ALL PRIVILEGES ON `' + schema + "`.* TO %s@'127.0.0.1'", (username,))
             identity = {'schema': schema, 'port': port, 'server_uuid': server_uuid,
                 'datadir': str(data.resolve()), 'version': version, 'username': username}
@@ -89,6 +93,14 @@ def main():
                         cursor.execute('SELECT @@datadir, @@port')
                         observed_data, observed_port = cursor.fetchone()
                         assert Path(observed_data).resolve() == data.resolve() and observed_port == port
+                        if '--drop-owned-schema' in sys.argv:
+                            # Only this run's positively identified server/schema/user.
+                            if schema_created:
+                                cursor.execute('DROP DATABASE `' + schema + '`')
+                                schema_dropped = True
+                            if user_created:
+                                cursor.execute("DROP USER %s@'127.0.0.1'", (username,))
+                                user_dropped = True
                         cursor.execute('SHUTDOWN')
                 except pymysql.MySQLError:
                     pass
@@ -102,7 +114,10 @@ def main():
                     process.wait(timeout=10)
             if process is not None:
                 (directory / 'stopped.json').write_text(json.dumps({'pid': process.pid,
-                    'exit_code': process.returncode, 'running': process.poll() is None}), encoding='utf-8')
+                    'exit_code': process.returncode, 'running': process.poll() is None,
+                    'schema_dropped': schema_dropped, 'user_dropped': user_dropped}), encoding='utf-8')
+                if '--drop-owned-schema' in sys.argv and schema_created and not (schema_dropped and user_dropped):
+                    raise RuntimeError('Owned schema/user cleanup incomplete')
                 if process.returncode != 0:
                     raise RuntimeError('Owned test MySQL did not shut down normally')
 

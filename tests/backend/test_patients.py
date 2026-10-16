@@ -266,6 +266,9 @@ class PatientApiTests(unittest.TestCase):
         self.assertEqual(self.client.get(self.url + f"/{row.id}", headers=self.headers["doctor"]).status_code, 403)
 
     def test_third_migration_preserves_legacy_records(self):
+        # Keep the historical SQLite role rebuild on its required fresh transaction.
+        with db.engine.begin() as connection:
+            command.downgrade(migration_config(connection), "0006_receptionist_appointments")
         with db.engine.begin() as connection:
             command.downgrade(migration_config(connection), "0002_password_hash")
             connection.exec_driver_sql("INSERT INTO clinical_assessments (patient_id, recorded_by_user_id, notes) VALUES (?, ?, ?)", (self.patient.id, self.users["doctor"].id, "legacy fixture"))

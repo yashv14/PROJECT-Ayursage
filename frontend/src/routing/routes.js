@@ -6,6 +6,10 @@ export const roleRoutes = {
 };
 
 export function resolveRoute(path, user) {
+  if (path === '/admin/grants') {
+    if (!user) return { redirect: '/login' };
+    return { page: user.role === 'admin' ? 'adminGrants' : 'forbidden' };
+  }
   if (path === '/' || path === '/login' || path === '/register') {
     return user ? { redirect: roleRoutes[user.role]?.path || '/login' } : { page: path === '/register' ? 'register' : 'login' };
   }

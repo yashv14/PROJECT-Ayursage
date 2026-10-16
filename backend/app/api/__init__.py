@@ -9,6 +9,7 @@ from backend.app.auth.routes import auth
 api.register_blueprint(auth)
 from .patients import patients
 from . import access_grants  # noqa: E402,F401 -- attaches to patient blueprint
+from . import clinical_reviews  # noqa: E402,F401 -- attaches to patient blueprint
 api.register_blueprint(patients)
 from .reception import reception
 api.register_blueprint(reception)

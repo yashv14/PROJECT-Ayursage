@@ -1,5 +1,10 @@
 # Doctor assessment viewer
 
+Current extension: [doctor clinical review](doctor-clinical-review.md) adds explicit
+review permission, human-authored notes/recommendations/prescriptions and persisted
+append-only decisions. Historical read-only and browser evidence below is retained;
+it does not establish browser verification of the new review workflow.
+
 MySQL follow-up: [disposable MySQL verification](mysql-access-verification.md)
 records the actual MySQL 8.0.46/browser pass, seven database checks and minimal
 singleton-key compatibility fix. It supersedes the MySQL-unverified limitation

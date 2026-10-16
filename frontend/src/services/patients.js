@@ -28,6 +28,7 @@ function resourcePath(patientId) {
 function grant(row, patientId) {
   const timestamp = value => typeof value === 'string' && value.endsWith('Z') && Number.isFinite(Date.parse(value));
   if (!idValid(row?.id) || row.patient_id !== patientId || !idValid(row.doctor_user_id)
+      || (Object.hasOwn(row, 'allow_review') && typeof row.allow_review !== 'boolean')
       || !idValid(row.issuer_user_id) || !idValid(row.consent_owner_user_id)
       || row.scope !== 'assessment_read' || !['issued', 'expired', 'revoked'].includes(row.status)
       || !validText(row.consent_reference, 256, true)
@@ -88,6 +89,25 @@ export function createPatientService(api) {
     }
   }
   return {
+    async issueAccessGrant(patientId, payload) {
+      if (!payload || Object.keys(payload).length !== 3 || !idValid(payload.doctor_user_id)
+          || !validText(payload.consent_reference, 256, true) || /[\x00-\x1f]/.test(payload.consent_reference)
+          || typeof payload.allow_review !== 'boolean') throw new ApiError('Check the doctor ID, consent reference and review permission.', 400);
+      let data;
+      try { data = await request(grantPath(patientId), { method: 'POST', body: payload }); }
+      catch (error) {
+        const messages = { 400: 'Grant rejected. Check the doctor ID and recorded consent reference.',
+          403: 'Grant-administrator permission is required.',
+          404: 'The selected patient is unavailable.',
+          409: 'An active grant or reused consent reference already exists. Refresh grants before continuing.' };
+        if (messages[error.status]) throw new ApiError(messages[error.status], error.status);
+        throw error;
+      }
+      const row = grant(data.grant, patientId);
+      if (row.doctor_user_id !== payload.doctor_user_id || row.allow_review !== payload.allow_review
+          || row.consent_reference !== payload.consent_reference.trim() || row.status !== 'issued') throw unexpected();
+      return row;
+    },
     async getAuthorizedPatients(afterId = 0) {
       if (!Number.isInteger(afterId) || afterId < 0 || afterId > 2147483647) throw unexpected();
       const data = await request(`/patients/authorized?after_id=${afterId}`);

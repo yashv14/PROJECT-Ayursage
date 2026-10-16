@@ -22,7 +22,8 @@ def grant_data(row):
     def timestamp(value):
         return value.isoformat() + "Z" if value else None
     return {"id": row.id, "patient_id": row.patient_id, "doctor_user_id": row.doctor_user_id,
-        "scope": row.scope, "status": "expired" if row.status == "issued" and row.expires_at <= utc_now() else row.status,
+        "scope": row.scope, "allow_review": row.allow_review,
+        "status": "expired" if row.status == "issued" and row.expires_at <= utc_now() else row.status,
         "issuer_user_id": row.issuer_user_id, "consent_owner_user_id": row.consent_owner_user_id,
         "consent_reference": row.consent_reference, "issued_at": timestamp(row.issued_at),
         "expires_at": timestamp(row.expires_at), "revoked_by_user_id": row.revoked_by_user_id,
@@ -36,7 +37,9 @@ def issue_grant(patient_id):
     if not bounded_id(patient_id):
         raise NotFound()
     payload = json_object()
-    if set(payload) != {"doctor_user_id", "consent_reference"}:
+    if not {"doctor_user_id", "consent_reference"} <= set(payload) or set(payload) - {"doctor_user_id", "consent_reference", "allow_review"}:
+        raise BadRequest()
+    if type(payload.get("allow_review", False)) is not bool:
         raise BadRequest()
     doctor_id = payload["doctor_user_id"]
     reference = payload["consent_reference"]
@@ -63,7 +66,8 @@ def issue_grant(patient_id):
     row = PatientDoctorGrant(patient_id=patient.id, doctor_user_id=doctor.id,
         consent_owner_user_id=patient.owner_user_id, consent_reference=reference.strip(),
         issuer_user_id=g.current_user.id, scope="assessment_read", status="issued",
-        issued_at=now, expires_at=now + timedelta(days=30), active_slot=1)
+        issued_at=now, expires_at=now + timedelta(days=30), active_slot=1,
+        allow_review=payload.get("allow_review", False))
     db.session.add(row)
     try:
         db.session.commit()

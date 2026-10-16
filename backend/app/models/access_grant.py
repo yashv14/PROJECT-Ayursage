@@ -45,6 +45,8 @@ class PatientDoctorGrant(db.Model):
     revoked_at: Mapped[datetime | None] = mapped_column()
     # NULL permits multiple historical rows on both SQLite and MySQL.
     active_slot: Mapped[int | None] = mapped_column()
+    # Explicit consent-attested opt-in; historical/read-only grants stay false.
+    allow_review: Mapped[bool] = mapped_column(default=False, server_default="0")
 
 
 @event.listens_for(Session, "before_flush")

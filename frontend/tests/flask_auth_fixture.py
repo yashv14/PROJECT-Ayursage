@@ -48,8 +48,19 @@ with app.app_context():
             assert Path(observed[1]).resolve() == Path(mysql_identity['datadir']).resolve()
             assert observed[3] == mysql_identity['server_uuid'] and db.engine.dialect.name == 'mysql'
             assert connection.execute(text('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()')).scalar_one() == 0
+    baseline_assessment = None
+    if '--clinical-review-checks' in sys.argv:
+        assert mysql_identity is not None, 'Clinical concurrency checks require owned MySQL'
+        sys.path.insert(0, str(Path(__file__).parent / 'e2e'))
+        from mysql_review_assertions import prepare_baseline, verify_baseline
+        with db.engine.begin() as connection:
+            command.upgrade(migration_config(connection), '0006_receptionist_appointments')
+        with db.engine.begin() as connection:
+            baseline_assessment = prepare_baseline(connection)
     with db.engine.begin() as connection:
         command.upgrade(migration_config(connection), 'head')
+        if baseline_assessment is not None:
+            verify_baseline(connection, baseline_assessment)
     from sqlalchemy import text
     with db.engine.connect() as connection:
         head = connection.execute(text('SELECT version_num FROM alembic_version')).scalar_one()
@@ -67,12 +78,17 @@ if '--doctor-access-fixtures' in sys.argv:
         patch.object(V17Service, method, side_effect=AssertionError('ML execution forbidden in access tests')).start()
     with app.app_context():
         create_account('other-doctor@example.invalid', 'fixture-password-123', 'doctor')
+        if '--admin-grant-fixtures' in sys.argv:
+            create_account('unprivileged-admin@example.invalid', 'fixture-password-123', 'admin')
     result = app.test_cli_runner().invoke(args=['authorize-grant-administrator', '--email', 'admin@example.invalid'])
     assert result.exit_code == 0, 'Synthetic grant-administrator provisioning failed'
     if mysql_identity:
         sys.path.insert(0, str(Path(__file__).parent / 'e2e'))
         from mysql_assertions import verify_mysql
         print('MYSQL_CHECKS ' + json.dumps(verify_mysql(app)), flush=True)
+        if '--clinical-review-checks' in sys.argv:
+            from mysql_review_assertions import verify_mysql_reviews
+            print('MYSQL_REVIEW_CHECKS ' + json.dumps(verify_mysql_reviews(app)), flush=True)
 
 if '--patient-fixtures' in sys.argv:
     import ast

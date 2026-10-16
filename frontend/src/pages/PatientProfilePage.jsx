@@ -7,11 +7,11 @@ export function PatientError({ message, onRetry }) {
   </div>;
 }
 
-export function AccessGrantsScreen({ grants, onReload, onMore, onConfirm, onCancel, onRevoke }) {
-  const busy = ['loading', 'revoking'].includes(grants.status);
+export function AccessGrantsScreen({ grants, onReload, onMore, onConfirm, onCancel, onRevoke, administration = false }) {
+  const busy = ['loading', 'issuing', 'revoking'].includes(grants.status);
   return <section className="card p-4 mt-4" aria-labelledby="doctor-access-title" aria-busy={busy}>
-    <h2 id="doctor-access-title" className="h5">Doctor access to my assessments</h2>
-    <p className="text-secondary">These grants let a doctor read your saved assessments. Revoking a grant stops future reads through that grant. New access requires a new grant from an authorized administrator.</p>
+    <h2 id="doctor-access-title" className="h5">{administration ? 'Selected patient grants' : 'Doctor access to my assessments'}</h2>
+    <p className="text-secondary">{administration ? 'Consent-attested access for the selected patient. Revocation stops future reads and reviews through the grant.' : 'These grants let a doctor read your saved assessments. Clinical review also requires explicit review permission. Revoking a grant stops future reads and reviews through that grant. New access requires a new grant from an authorized administrator.'}</p>
     <PatientError message={grants.error} />
     {grants.notice && <p className="alert alert-success" role="status">{grants.notice}</p>}
     {busy && <Loading label={grants.status === 'revoking' ? 'Revoking doctor access...' : 'Loading doctor access...'} />}
@@ -20,7 +20,7 @@ export function AccessGrantsScreen({ grants, onReload, onMore, onConfirm, onCanc
       <caption>Current and previous assessment-read grants. Times are shown in your device timezone.</caption>
       <thead><tr><th scope="col">Grant / Doctor</th><th scope="col">Status</th><th scope="col">Expires</th><th scope="col">Actions</th></tr></thead>
       <tbody>{grants.items.map(row => <tr key={row.id}>
-        <th scope="row">Grant #{row.id}<br />Doctor #{row.doctor_user_id}</th>
+        <th scope="row">Grant #{row.id}<br />Doctor #{row.doctor_user_id}<br />{row.allow_review === true ? 'Clinical review permitted' : 'Read-only'}</th>
         <td>{({ issued: 'Active', expired: 'Expired', revoked: 'Revoked' })[row.status]}</td>
         <td><time dateTime={row.expires_at}>{new Date(row.expires_at).toLocaleString()}</time></td>
         <td>{row.status === 'issued' && (grants.confirmingId === row.id

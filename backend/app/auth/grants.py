@@ -28,7 +28,7 @@ def assessment_read_grants(now):
     """One shared, doctor-scoped query for both directory and individual reads."""
     return select(
         Patient.id.label("patient_id"), PatientDoctorGrant.issued_at, PatientDoctorGrant.expires_at,
-        PatientDoctorGrant.consent_reference,
+        PatientDoctorGrant.consent_reference, PatientDoctorGrant.id.label("grant_id"), PatientDoctorGrant.allow_review,
     ).join(PatientDoctorGrant, PatientDoctorGrant.patient_id == Patient.id).where(
         PatientDoctorGrant.doctor_user_id == g.current_user.id,
         PatientDoctorGrant.consent_owner_user_id == Patient.owner_user_id,

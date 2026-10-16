@@ -46,6 +46,7 @@ reports/
 ml/artifacts/*
 !ml/artifacts/README.md
 # Local and diagnostic outputs
+/.local/mysql-e2e-*/
 *.log
 .DS_Store
 Thumbs.db

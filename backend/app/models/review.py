@@ -1,8 +1,8 @@
-"""Reserved review history. Application writes are blocked pending authorization."""
+"""Immutable review history; only the authorized review API appends Core rows."""
 
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, String, Text, UniqueConstraint, event, func
+from sqlalchemy import CheckConstraint, ForeignKey, JSON, String, Text, UniqueConstraint, event, func
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
 from backend.app.database import db
@@ -23,7 +23,7 @@ def validate_review_transition(from_state, to_state):
 
 
 class ReviewWriteBlocked(ValueError):
-    """No grants or review/prediction policy exists to authorize a decision."""
+    """Ordinary ORM insertion cannot bypass the authorized review service."""
 
 
 class ReviewHistoryImmutable(ValueError):
@@ -51,6 +51,8 @@ class AssessmentReview(db.Model):
     to_state: Mapped[str] = mapped_column(String(32))
     decided_at: Mapped[datetime] = mapped_column(server_default=func.current_timestamp())
     reason: Mapped[str | None] = mapped_column(Text)
+    recommendations: Mapped[dict | None] = mapped_column(JSON(none_as_null=True))
+    prescriptions: Mapped[list | None] = mapped_column(JSON(none_as_null=True))
     assessment: Mapped["ClinicalAssessment"] = relationship(back_populates="review_history")
     actor: Mapped["User"] = relationship()
 

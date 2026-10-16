@@ -5,6 +5,7 @@ import { AssessmentHistoryScreen } from './AssessmentHistoryPage.jsx';
 import { AssessmentDetailScreen } from './AssessmentDetailPage.jsx';
 import { Loading } from '../components/Loading.jsx';
 import { PatientError } from './PatientProfilePage.jsx';
+import { DoctorReviewPanel } from './DoctorReviewPanel.jsx';
 
 export function DoctorDirectoryScreen({ state, onReload, onMore }) {
   const busy = state.status === 'idle' || state.status === 'loading';
@@ -25,7 +26,7 @@ export function DoctorDirectoryScreen({ state, onReload, onMore }) {
   </section>;
 }
 
-export function DoctorAssessmentScreen({ patientId, assessmentId, state, onReload, onMore }) {
+export function DoctorAssessmentScreen({ patientId, assessmentId, state, onReload, onMore, reviewPanel }) {
   return <>
     <a href="#/doctor/assessments">Back to authorized patients</a>
     <p className="mt-3">Patient ID: {patientId}. Read-only assessment access.</p>
@@ -33,6 +34,7 @@ export function DoctorAssessmentScreen({ patientId, assessmentId, state, onReloa
       <AssessmentDetailScreen detail={{ status: state.status, data: state.detail, error: state.error }} onRetry={onReload}
         backHref={`#/doctor/patients/${patientId}/assessments`} />
       <button className="btn btn-outline-secondary mt-3" disabled={state.status === 'loading'} onClick={onReload}>Refresh assessment</button>
+      {state.status === 'ready' && state.detail && reviewPanel}
     </> : <AssessmentHistoryScreen history={state} onReload={onReload} onMore={onMore} readOnly
       detailHref={id => `#/doctor/patients/${patientId}/assessments/${id}`} />}
   </>;
@@ -58,6 +60,8 @@ function DoctorRecordViewer({ patientId, assessmentId }) {
   }, [viewer, patientId, assessmentId]);
   if (!patientId) return <DoctorDirectoryScreen state={state} onReload={reload} onMore={() => viewer.loadDirectory(true)} />;
   return <DoctorAssessmentScreen patientId={patientId} assessmentId={assessmentId} state={state}
+    reviewPanel={assessmentId ? <DoctorReviewPanel key={assessmentId} patientId={patientId} assessmentId={assessmentId}
+      onAccessDenied={() => viewer.loadDetail(assessmentId)} /> : null}
     onReload={reload} onMore={() => viewer.loadHistory(true)} />;
 }
 

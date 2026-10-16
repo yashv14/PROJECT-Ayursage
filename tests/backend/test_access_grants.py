@@ -278,6 +278,9 @@ class AccessGrantTests(unittest.TestCase):
         self.assessment()
         with db.engine.begin() as connection:
             self.assertEqual(compare_metadata(MigrationContext.configure(connection), db.metadata), [])
+            command.downgrade(migration_config(connection), "0006_receptionist_appointments")
+        # Commit the new revision rollback before 0006's SQLite role rebuild.
+        with db.engine.begin() as connection:
             command.downgrade(migration_config(connection), "0004_assessment_reviews")
             self.assertEqual(connection.exec_driver_sql("SELECT COUNT(*) FROM clinical_assessments").scalar(), 1)
             command.upgrade(migration_config(connection), "head")

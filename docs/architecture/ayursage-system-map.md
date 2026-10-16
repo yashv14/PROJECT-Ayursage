@@ -1,5 +1,33 @@
 # AYUR-SAGE system map: confirmed four-role design
 
+## Current application milestones — 16 October 2026
+
+**Doctor clinical review: VERIFIED for the tested disposable scenarios.**
+[Clinical-review evidence](../setup/doctor-clinical-review.md) records MySQL 8.0.46
+0006 -> 0007 migration/preservation, three independent-connection contention
+trials (201/409), seven browser/backend stages, 127 SQLite backend regressions,
+80 frontend regressions and the in-memory build. These are retained acceptance
+results, not a claim that this follow-up reran that milestone. Reopen only for a
+specific regression. Production/cloud, other browsers and exhaustive schedules
+remain outside that acceptance.
+
+**Next application slice implemented: administrator grant-management UI.**
+`#/admin/grants` now completes the existing issue/list/revoke API workflow. It
+requires the admin role in the UI and the existing explicit GrantAdministrator
+permission at the backend, retained-consent attestation, positive patient/doctor
+IDs, confirmation, 30-day expiry and explicit review opt-in (default false).
+No backend policy or schema change was required. See
+[administrator grant UI](../setup/admin-grant-management.md) for current tests,
+browser evidence, operator steps and limits. This does not add staff provisioning,
+patient search, clinical reads or release authority to administrators.
+
+The application remains React/Vite -> Flask -> SQLAlchemy/MySQL. Migration head
+is 0007_clinical_review. Patient grant revocation, doctor directory/detail/review
+and receptionist features supersede the absence/read-only claims in the historical
+sections below. V17 runtime/provenance, observer security/execution safety and
+independent prediction-parity gates remain **BLOCKED and unchanged**. No inference
+or patient-result-release policy follows from human clinical review verification.
+
 ## Current receptionist slice — 14 October 2026
 
 Receptionist identity, exact-email administrative lookup, manual appointment

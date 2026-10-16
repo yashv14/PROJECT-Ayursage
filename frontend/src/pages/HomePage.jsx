@@ -3,8 +3,8 @@ import { roleLabels } from '../services/auth.js';
 
 const descriptions = {
   patient: 'View your patient profile, save a clinical assessment, or browse your assessment history.',
-  doctor: 'Read saved patient assessments using an existing assessment-read grant. Review decisions and prescriptions remain unavailable.',
-  admin: 'Your administrator account is ready. Account management tools are planned for a later release.',
+  doctor: 'View authorized patient assessments. Clinical review and manual prescriptions require explicit review permission.',
+  admin: 'Manage patient–doctor grants if your account has explicit grant-administrator permission.',
 };
 export function HomePage() {
   const { user } = useAuth();
@@ -18,6 +18,7 @@ export function HomePage() {
     </div>
     {user.role === 'patient' && <div className="d-flex flex-wrap gap-2 mt-4"><a className="btn btn-primary" href="#/patient/profile">My profile</a><a className="btn btn-outline-primary" href="#/patient/assessments/new">New assessment</a><a className="btn btn-outline-primary" href="#/patient/assessments">Assessment history</a></div>}
     {user.role === 'doctor' && <a className="btn btn-primary mt-4" href="#/doctor/assessments">Open assessment viewer</a>}
-    <p className="small text-secondary mt-3">Treatment and diet recommendations are not available in this release.</p>
+    {user.role === 'admin' && <a className="btn btn-primary mt-4" href="#/admin/grants">Manage patient–doctor grants</a>}
+    <p className="small text-secondary mt-3">Model inference remains unavailable. Clinical recommendations and prescriptions are entered by an authorized doctor.</p>
   </section>;
 }
