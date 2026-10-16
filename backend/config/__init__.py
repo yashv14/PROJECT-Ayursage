@@ -18,9 +18,8 @@ def load_config():
         raise ValueError("BACKEND_PORT must be an integer between 1 and 65535")
 
     return {
-        # Internal bootstrap opt-in only; no automatic loading or HTTP override.
-        # Remains false until a separately authorized runtime is prepared.
-        "V17_MODEL_LOADING_ENABLED": False,
+        # Environment opt-in for model loading; defaults to False for tests
+        "V17_MODEL_LOADING_ENABLED": os.environ.get("V17_MODEL_LOADING_ENABLED", "").strip().lower() in {"1", "true"},
         # No default signing secret or storage provider. Deployment is explicit.
         "REPORT_SIGNING_KEY": os.environ.get("REPORT_SIGNING_KEY") or None,
         "DEBUG": debug_value in {"1", "true"},
