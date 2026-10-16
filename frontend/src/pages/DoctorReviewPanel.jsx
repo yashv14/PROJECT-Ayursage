@@ -3,6 +3,7 @@ import { useAuth } from '../auth/AuthContext.jsx';
 import { createReviewStore, prescriptionFields } from '../doctor/review.js';
 import { outputTargets } from '../patient/assessmentFields.js';
 import { PatientError } from './PatientProfilePage.jsx';
+import { ClinicalReportPanel } from './ClinicalReportPanel.jsx';
 
 const names = { pending_review: 'Pending review', approved: 'Approved', returned_for_changes: 'Returned for changes' };
 export function DoctorReviewScreen({ state, onReload, onSave }) {
@@ -81,5 +82,6 @@ export function DoctorReviewPanel({ patientId, assessmentId, onAccessDenied }) {
   const [store] = useState(() => createReviewStore(reviews, patientId, assessmentId, { onAccessDenied }));
   const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
   useEffect(() => { const disconnect = store.connect(); store.load(); return disconnect; }, [store]);
-  return <DoctorReviewScreen state={state} onReload={() => store.load()} onSave={payload => store.save(payload)} />;
+  return <><DoctorReviewScreen state={state} onReload={() => store.load()} onSave={payload => store.save(payload)} />
+    {state.status === 'ready' && state.data?.can_review && <ClinicalReportPanel key={state.data.version} patientId={patientId} assessmentId={assessmentId} onAccessDenied={onAccessDenied} />}</>;
 }

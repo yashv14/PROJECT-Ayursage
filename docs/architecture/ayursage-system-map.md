@@ -1,5 +1,20 @@
 # AYUR-SAGE system map: confirmed four-role design
 
+## Approved PDF report slice - 16 October 2026
+
+Approval-bound immutable PDFs now extend the verified doctor clinical-review
+workflow. Review-enabled doctors explicitly issue one version-1 report; patients
+retrieve only their own issued report. Every doctor report request rechecks the
+current grant. Read-only/revoked grants and administrator role do not authorize
+reports. Private objects are separate from SQL metadata; signed application download
+links expire after 900 seconds and still require JWT and current authorization.
+Migration head is now **0008_clinical_reports**. Production storage is intentionally
+unconfigured; local verification uses an explicitly injected private test adapter.
+See [report implementation and evidence](../setup/clinical-pdf-reports.md) for
+API contracts, deployment prerequisites, failure recovery, tests and exact files.
+This supersedes historical report-absence claims below; it does not enable V17
+inference or change any observer/security acceptance gate.
+
 ## Current application milestones — 16 October 2026
 
 **Doctor clinical review: VERIFIED for the tested disposable scenarios.**

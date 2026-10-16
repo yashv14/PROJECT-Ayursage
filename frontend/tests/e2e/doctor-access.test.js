@@ -13,7 +13,8 @@ import { categoricalInputs, numericInputs, outputTargets } from '../../src/patie
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const password = 'fixture-password-123';
-const clinicalReview = process.env.AYURSAGE_E2E_CLINICAL_REVIEW === '1';
+const reports = process.env.AYURSAGE_E2E_REPORTS === '1';
+const clinicalReview = process.env.AYURSAGE_E2E_CLINICAL_REVIEW === '1' || reports;
 const adminGrants = process.env.AYURSAGE_E2E_ADMIN_GRANTS === '1';
 
 test(adminGrants ? 'browser: administrator grant issuance, reload, review consent and revocation' : 'browser: patient grant → doctor directory/history/detail → patient revocation → denied fresh reads', { timeout: 180000 }, async t => {
@@ -83,7 +84,8 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
   }
   child = spawn(interpreter.executable, ['-B', '-u', 'frontend/tests/flask_auth_fixture.py', '--doctor-access-fixtures',
     ...(adminGrants ? ['--admin-grant-fixtures'] : []),
-    ...(clinicalReview ? ['--clinical-review-checks'] : []),
+    ...(clinicalReview && databaseMode === 'mysql' ? ['--clinical-review-checks'] : []),
+    ...(reports ? ['--report-fixtures'] : []),
     ...(databaseMode === 'mysql' ? ['--mysql'] : [])], {
     cwd: root, windowsHide: true, env: { ...process.env, PYTHONPATH: interpreter.site,
       ...(mysqlTarget ? { AYURSAGE_E2E_MYSQL_URL: mysqlTarget.url, AYURSAGE_E2E_MYSQL_IDENTITY: mysqlTarget.identity_file } : {}) },
@@ -114,10 +116,10 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
     });
   });
   assert.equal(databaseInfo.dialect, databaseMode === 'mysql' ? 'mysql' : 'sqlite');
-  assert.equal(databaseInfo.migration, '0007_clinical_review');
+  assert.equal(databaseInfo.migration, '0008_clinical_reports');
   if (mysqlTarget) assert.equal(databaseInfo.schema, mysqlTarget.identity.schema);
   if (mysqlTarget) { assert.equal(mysqlChecks?.length, 7); t.diagnostic('MySQL-specific checks passed: ' + mysqlChecks.join(', ')); }
-  if (clinicalReview) {
+  if (clinicalReview && !reports || reports && databaseMode === 'mysql') {
     assert.equal(databaseMode, 'mysql', 'Clinical review mode requires disposable MySQL.');
     assert.equal(reviewChecks?.checks.length, 7); assert.equal(reviewChecks.races.length, 3);
     t.diagnostic('MySQL clinical-review checks: ' + JSON.stringify(reviewChecks));
@@ -303,6 +305,10 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
       await assert.rejects(submit(doctor), error => error.status === 403);
       await doctorPage.getByText('Read-only access.', { exact: false }).waitFor();
       assert.equal(await doctorPage.getByRole('button', { name: 'Save clinical review', exact: true }).count(), 0);
+      if (reports) {
+        await assert.rejects(doctor.api.request(`/patients/${patient.id}/assessments/${saved.id}/report`, { authenticated: true }), error => error.status === 403);
+        assert.equal(await doctorPage.getByRole('button', { name: 'Download approved PDF', exact: true }).count(), 0);
+      }
       for (const actor of [owner, unrelated, admin, reception, otherDoctor]) {
         await assert.rejects(submit(actor), error => error.status === 403);
         await assert.rejects(actor.api.request(reviewUrl, { authenticated: true }), error => error.status === 403);
@@ -317,6 +323,10 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
       assert.equal(grant.allow_review, true);
       await doctorPage.getByRole('button', { name: 'Refresh assessment', exact: true }).click();
       await doctorPage.getByLabel('Clinical notes (required)', { exact: true }).fill(manual.clinical_notes);
+      if (reports) {
+        assert.equal(await doctorPage.getByRole('button', { name: 'Issue approved PDF report', exact: true }).count(), 0);
+        await assert.rejects(doctor.api.request(`/patients/${patient.id}/assessments/${saved.id}/report`, { authenticated: true, method: 'POST', body: {} }), error => error.status === 409);
+      }
       for (const name of outputTargets) await doctorPage.getByLabel(`${name} (doctor-entered, required)`, { exact: true }).fill(manual.recommendations[name]);
       await doctorPage.getByRole('button', { name: 'Add prescription', exact: true }).click();
       for (const [name, value] of Object.entries(manual.prescriptions[0])) await doctorPage.getByLabel(name, { exact: true }).fill(value);
@@ -362,6 +372,37 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
       await patientPage.getByText('Clinical review permitted', { exact: false }).waitFor();
     });
   }
+  if (reports) {
+    await t.test('approved report is issued in browser, persists across reload, and downloads privately for doctor and owner', async () => {
+      await doctorPage.getByRole('button', { name: 'Issue approved PDF report', exact: true }).click();
+      const downloadButton = doctorPage.getByRole('button', { name: 'Download approved PDF', exact: true });
+      await downloadButton.waitFor();
+      const downloaded = doctorPage.waitForEvent('download');
+      await downloadButton.click();
+      const download = await downloaded;
+      assert.equal(download.suggestedFilename(), 'ayur-sage-clinical-report-v1.pdf');
+      assert.equal(await download.failure(), null);
+      const fs = await import('node:fs/promises');
+      const pdf = await fs.readFile(await download.path());
+      assert.equal(pdf.subarray(0, 5).toString(), '%PDF-');
+      await fs.mkdir(path.join(root, 'reports'), { recursive: true });
+      await fs.writeFile(path.join(root, 'reports', 'clinical-report-synthetic.pdf'), pdf);
+      await doctorPage.reload(); await login(doctorPage, 'doctor@example.invalid');
+      await doctorPage.goto(`${origin}/#/doctor/patients/${patient.id}/assessments/${saved.id}`);
+      await doctorPage.getByRole('button', { name: 'Download approved PDF', exact: true }).waitFor();
+      assert.equal(await doctorPage.getByRole('button', { name: 'Issue approved PDF report', exact: true }).count(), 0);
+      await patientPage.goto(`${origin}/#/patient/assessments/${saved.id}`);
+      const patientDownload = patientPage.waitForEvent('download');
+      await patientPage.getByRole('button', { name: 'Download approved PDF', exact: true }).click();
+      const ownerPdf = await patientDownload;
+      assert.deepEqual(await fs.readFile(await ownerPdf.path()), pdf);
+      for (const actor of [unrelated, admin, reception, otherDoctor]) {
+        await assert.rejects(actor.api.request(`/patients/${patient.id}/assessments/${saved.id}/report`, { authenticated: true }), error => error.status === 403);
+      }
+      await patientPage.goto(origin + '/#/patient/profile');
+      await patientPage.getByRole('button', { name: `Revoke grant ${grant.id} for doctor ${doctorUser.id}` }).waitFor();
+    });
+  }
   await t.test('patient UI revokes; next doctor request is 403 and removes stale clinical details', async () => {
     await patientPage.getByRole('button', { name: `Revoke grant ${grant.id} for doctor ${doctorUser.id}` }).click();
     await patientPage.getByRole('button', { name: 'Confirm revocation', exact: true }).click();
@@ -386,6 +427,12 @@ test(adminGrants ? 'browser: administrator grant issuance, reload, review consen
       await assert.rejects(doctor.api.request(url, { authenticated: true }), error => error.status === 403);
       await assert.rejects(doctor.api.request(url, { authenticated: true, method: 'POST', body: { expected_version: 3 } }), error => error.status === 403);
       assert.equal(await doctorPage.getByText('SYNTHETIC revised clinical notes', { exact: true }).count(), 0);
+      if (reports) {
+        const reportUrl = `/patients/${patient.id}/assessments/${saved.id}/report`;
+        await assert.rejects(doctor.api.request(reportUrl, { authenticated: true }), error => error.status === 403);
+        await assert.rejects(doctor.api.request(reportUrl + '/download-link', { authenticated: true, method: 'POST', body: {} }), error => error.status === 403);
+        assert.equal(await doctorPage.getByRole('button', { name: 'Download approved PDF', exact: true }).count(), 0);
+      }
     }
   });
 });

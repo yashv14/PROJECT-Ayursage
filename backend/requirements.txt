@@ -13,3 +13,6 @@ PyJWT==2.15.1
 SQLAlchemy==2.0.54
 typing_extensions==4.16.0
 Werkzeug==3.1.9
+reportlab==5.0.1
+pillow==12.3.0
+charset-normalizer==3.5.2

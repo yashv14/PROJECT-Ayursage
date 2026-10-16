@@ -26,7 +26,7 @@ export function createApiClient({ baseUrl = '/api', fetchImpl = globalThis.fetch
   return {
     setToken(value) { token = value; },
     setUnauthorizedHandler(handler) { onUnauthorized = handler; },
-    async request(path, { method = 'GET', body, authenticated = false, signal } = {}) {
+    async request(path, { method = 'GET', body, authenticated = false, signal, responseType = 'json', downloadToken } = {}) {
       const requestToken = authenticated ? token : null;
       if (authenticated && !requestToken) throw new ApiError(messages[401], 401);
       let response;
@@ -34,7 +34,8 @@ export function createApiClient({ baseUrl = '/api', fetchImpl = globalThis.fetch
         response = await fetchImpl(`${base}${path}`, {
           method, signal, credentials: 'omit', cache: 'no-store', redirect: 'error',
           headers: {
-            Accept: 'application/json',
+            Accept: responseType === 'blob' ? 'application/pdf' : 'application/json',
+            ...(downloadToken ? { 'X-Report-Link': downloadToken } : {}),
             ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
             ...(requestToken ? { Authorization: `Bearer ${requestToken}` } : {}),
           },
@@ -43,6 +44,10 @@ export function createApiClient({ baseUrl = '/api', fetchImpl = globalThis.fetch
       } catch (error) {
         if (error.name === 'AbortError') throw error;
         throw new ApiError('Unable to connect to AYUR-SAGE. Please try again.');
+      }
+      if (response.ok && responseType === 'blob') {
+        if (response.headers.get('content-type')?.split(';')[0] !== 'application/pdf') throw new ApiError('The report service returned an unexpected document.');
+        return response.blob();
       }
       let data;
       try { data = await response.json(); } catch { /* A proxy may return HTML. */ }

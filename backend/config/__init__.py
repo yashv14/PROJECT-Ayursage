@@ -21,6 +21,8 @@ def load_config():
         # Internal bootstrap opt-in only; no automatic loading or HTTP override.
         # Remains false until a separately authorized runtime is prepared.
         "V17_MODEL_LOADING_ENABLED": False,
+        # No default signing secret or storage provider. Deployment is explicit.
+        "REPORT_SIGNING_KEY": os.environ.get("REPORT_SIGNING_KEY") or None,
         "DEBUG": debug_value in {"1", "true"},
         "SECRET_KEY": os.environ.get("SECRET_KEY") or None,
         "JWT_SECRET_KEY": os.environ.get("JWT_SECRET_KEY") or None,

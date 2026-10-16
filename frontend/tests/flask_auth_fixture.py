@@ -40,6 +40,10 @@ if '--mysql' in sys.argv:
     assert url.database == mysql_identity['schema'] and url.database.startswith('ayursage_e2e_')
     assert url.username == mysql_identity['username'] and url.port == mysql_identity['port']
 app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': database, 'JWT_SECRET_KEY': secrets.token_urlsafe(48)})
+if '--report-fixtures' in sys.argv:
+    from backend.app.services.report_storage import MemoryReportStorage
+    app.extensions['report_storage'] = MemoryReportStorage()
+    app.config['REPORT_SIGNING_KEY'] = secrets.token_urlsafe(48)
 with app.app_context():
     if mysql_identity:
         with db.engine.connect() as connection:

@@ -87,3 +87,4 @@ class ClinicalAssessment(db.Model):
 from .review import AssessmentReview, validate_review_transition  # noqa: E402,F401
 from .access_grant import GrantAdministrator, PatientDoctorGrant  # noqa: E402,F401
 from .appointment import Appointment, AppointmentEvent, AppointmentLock  # noqa: E402,F401
+from .report import ClinicalReport  # noqa: E402,F401

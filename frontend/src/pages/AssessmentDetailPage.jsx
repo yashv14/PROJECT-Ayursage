@@ -2,7 +2,7 @@ import { inputFeatures } from '../patient/assessmentFields.js';
 import { Loading } from '../components/Loading.jsx';
 import { PatientError } from './PatientProfilePage.jsx';
 
-export function AssessmentDetailScreen({ detail, onRetry, backHref = '#/patient/assessments' }) {
+export function AssessmentDetailScreen({ detail, onRetry, backHref = '#/patient/assessments', reportPanel }) {
   const row = detail.data;
   return <section className="patient-page">
     <a href={backHref}>Back to assessment history</a>
@@ -17,6 +17,7 @@ export function AssessmentDetailScreen({ detail, onRetry, backHref = '#/patient/
         <h2 className="h5 mt-3">Patient-supplied notes</h2><p className="patient-text mb-0">{row.notes === null || row.notes === '' ? 'No notes were supplied.' : row.notes}</p>
       </div>
       <p className="alert alert-info mt-3">This page shows saved inputs and notes. Model predictions are response-only and are not stored with the assessment or available from assessment history.</p>
+      {reportPanel}
     </>}
   </section>;
 }

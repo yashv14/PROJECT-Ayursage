@@ -5,6 +5,7 @@ import { ProfileScreen } from './PatientProfilePage.jsx';
 import { AssessmentFormScreen } from './AssessmentFormPage.jsx';
 import { AssessmentHistoryScreen } from './AssessmentHistoryPage.jsx';
 import { AssessmentDetailScreen } from './AssessmentDetailPage.jsx';
+import { ClinicalReportPanel } from './ClinicalReportPanel.jsx';
 
 export function PatientWorkspacePage({ page, assessmentId }) {
   const { patients } = useAuth();
@@ -29,5 +30,6 @@ export function PatientWorkspacePage({ page, assessmentId }) {
   }
   if (page === 'newAssessment') return <AssessmentFormScreen form={state.form} onField={workspace.changeField} onNotes={workspace.changeNotes} onPredict={workspace.changePredict} onSubmit={workspace.submit} onReset={workspace.resetForm} />;
   if (page === 'history') return <AssessmentHistoryScreen history={state.history} onReload={() => workspace.loadHistory()} onMore={() => workspace.loadHistory(true)} />;
-  return <AssessmentDetailScreen detail={state.detail.requestedId === assessmentId ? state.detail : { status: 'loading', data: null, error: '' }} onRetry={() => workspace.loadDetail(assessmentId)} />;
+  return <AssessmentDetailScreen detail={state.detail.requestedId === assessmentId ? state.detail : { status: 'loading', data: null, error: '' }} onRetry={() => workspace.loadDetail(assessmentId)}
+    reportPanel={<ClinicalReportPanel key={assessmentId} patientId={state.profile.data.id} assessmentId={assessmentId} />} />;
 }
